@@ -10,7 +10,8 @@ class RachelsSandwichesApp : Application() {
     companion object {
         lateinit var instance: RachelsSandwichesApp
             private set
-        val MAX_PICKLES = 10
+        const val MAX_PICKLES = 10
+        const val ORDERS_COLLECTION = "orders"
     }
 
     var orderState: OrderState = OrderState.DONE
@@ -25,30 +26,42 @@ class RachelsSandwichesApp : Application() {
     private fun downloadOrder() {
         val db = FirebaseFirestore.getInstance()
         // todo: get ID from phone
-        db.collection("orders").document("EgUpS4fSEvf0dVV6M8bM").get()
+        db.collection(ORDERS_COLLECTION).document("EgUpS4fSEvf0dVV6M8bM").get()
             .addOnSuccessListener { result ->
                 order = result.toObject(FirestoreOrder::class.java)
             }
     }
 
-    fun uploadOrder(order: FirestoreOrder, callback: (() -> Unit)? = null) {
-        val db = FirebaseFirestore.getInstance()
-        db.collection("orders").document(order.id!!).set(order)
-            .addOnSuccessListener {
-                if (callback != null) {
-                    callback()
+    fun uploadOrder(callback: (() -> Unit)? = null) {
+        if (order != null) {
+            val db = FirebaseFirestore.getInstance()
+            db.collection(ORDERS_COLLECTION).document(order!!.id!!).set(order!!)
+                .addOnSuccessListener {
+                    if (callback != null) {
+                        callback()
+                    }
                 }
-                Log.d("eilon", "success")
-            }
-            .addOnFailureListener {
-                // todo: deal with failure
-                Log.d("eilon", "fail ${order.id}")
-            }
+                .addOnFailureListener {
+                    // todo: deal with failure
+                }
+        }
     }
 
-    fun uploadDeleteOrder(order: FirestoreOrder) {
-        val db = FirebaseFirestore.getInstance()
-        db.collection("orders").document(order.id!!).delete()
-            .addOnSuccessListener { /**/ }
+    fun uploadDeleteOrder(callback: (() -> Unit)? = null) {
+        if (order != null) {
+            val db = FirebaseFirestore.getInstance()
+            db.collection(ORDERS_COLLECTION).document(order!!.id!!).delete()
+                .addOnSuccessListener {
+                    orderState = OrderState.DONE
+                    order = null
+                    if (callback != null) {
+                        callback()
+                    }
+                }
+                .addOnFailureListener {
+                    // todo: deal with failure
+                }
+        }
+
     }
 }

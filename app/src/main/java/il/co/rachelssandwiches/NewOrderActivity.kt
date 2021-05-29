@@ -11,18 +11,18 @@ import java.util.*
 
 class NewOrderActivity : AppCompatActivity() {
 
-    lateinit var picklesAdd: Button
-    lateinit var picklesQuantityView: TextView
-    lateinit var picklesRemove: Button
-    var picklesQuantity = 0
+    private lateinit var picklesAdd: Button
+    private lateinit var picklesQuantityView: TextView
+    private lateinit var picklesRemove: Button
+    private var picklesQuantity = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_new_order)
         val nameEditText = findViewById<EditText>(R.id.nameEditText)
-        picklesAdd = findViewById<Button>(R.id.picklesAdd)
-        picklesQuantityView = findViewById<TextView>(R.id.picklesQuantity)
-        picklesRemove = findViewById<Button>(R.id.picklesRemove)
+        picklesAdd = findViewById(R.id.picklesAdd)
+        picklesQuantityView = findViewById(R.id.picklesQuantity)
+        picklesRemove = findViewById(R.id.picklesRemove)
         val hummusCheckBox = findViewById<CheckBox>(R.id.hummusCheckBox)
         val tahiniCheckBox = findViewById<CheckBox>(R.id.tahiniCheckBox)
         val commentsEditText = findViewById<EditText>(R.id.commentsEditText)
@@ -30,12 +30,10 @@ class NewOrderActivity : AppCompatActivity() {
 
         picklesAdd.setOnClickListener {
             picklesQuantity++
-            picklesQuantityView.text = picklesQuantity.toString()
             updateAddRemoveButtons()
         }
         picklesRemove.setOnClickListener {
             picklesQuantity--
-            picklesQuantityView.text = picklesQuantity.toString()
             updateAddRemoveButtons()
         }
 
@@ -43,18 +41,15 @@ class NewOrderActivity : AppCompatActivity() {
 
         saveButton.setOnClickListener {
             it.isEnabled = false
-            val newId = UUID.randomUUID().toString()
-            val order = FirestoreOrder(
-                id = newId,
+            RachelsSandwichesApp.instance.order = FirestoreOrder(
+                id = UUID.randomUUID().toString(),
                 customer_name = nameEditText.text.toString(),
                 pickles = picklesQuantity,
                 hummus = hummusCheckBox.isChecked,
                 tahini = tahiniCheckBox.isChecked,
                 comment = commentsEditText.text.toString()
             )
-            RachelsSandwichesApp.instance.uploadOrder(
-                order
-            ) {
+            RachelsSandwichesApp.instance.uploadOrder {
                 startActivity(Intent(this, EditOrderActivity::class.java))
                 finish()
             }
@@ -62,6 +57,7 @@ class NewOrderActivity : AppCompatActivity() {
     }
 
     private fun updateAddRemoveButtons() {
+        picklesQuantityView.text = picklesQuantity.toString()
         if (picklesQuantity >= RachelsSandwichesApp.MAX_PICKLES) {
             picklesAdd.isEnabled = false
             picklesRemove.isEnabled = true
