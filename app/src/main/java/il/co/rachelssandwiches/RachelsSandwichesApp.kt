@@ -1,17 +1,24 @@
 package il.co.rachelssandwiches
 
+import android.app.Application
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
-import android.os.Bundle
 
-class MainActivity : AppCompatActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
 
-        startActivity(Intent(this, NewOrderActivity::class.java))
-        // todo: maybe should start with a main activity
-//        when (RachelsSandwichesApp.instance.orderState) {
+class RachelsSandwichesApp : Application() {
+
+    companion object {
+        lateinit var instance: RachelsSandwichesApp
+            private set
+    }
+
+    var orderState: OrderState = OrderState.DONE
+
+    override fun onCreate() {
+        super.onCreate()
+//        FirebaseApp.initializeApp(this)
+
+//        // todo: maybe should start with a main activity
+//        when (orderState) {
 //            OrderState.DONE -> {
 //                startActivity(Intent(this, NewOrderActivity::class.java))
 //            }

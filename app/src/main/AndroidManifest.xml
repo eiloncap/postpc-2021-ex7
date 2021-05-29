@@ -3,14 +3,14 @@
     package="il.co.rachelssandwiches">
 
     <application
-        android:name=".RSApp"
+        android:name=".RachelsSandwichesApp"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.RachelsSandwiches">
-        <activity android:name=".OrderReadyActivity"></activity>
+        <activity android:name=".OrderReadyActivity" />
         <activity android:name=".InProgressActivity" />
         <activity android:name=".EditOrderActivity" />
         <activity android:name=".NewOrderActivity" />
