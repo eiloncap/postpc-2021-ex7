@@ -11,7 +11,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.RachelsSandwiches">
         <activity android:name=".OrderReadyActivity" />
-        <activity android:name=".InProgressActivity" />
+        <activity android:name=".OrderInProgressActivity" />
         <activity android:name=".EditOrderActivity" />
         <activity android:name=".NewOrderActivity" />
         <activity android:name=".MainActivity">
