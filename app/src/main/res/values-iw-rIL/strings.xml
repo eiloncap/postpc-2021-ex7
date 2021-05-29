@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">הכריך של רחל</string>
+    <string name="new_order_title">הזמנה חדשה</string>
+    <string name="name">שם:</string>
+    <string name="pickles">חמוצים:</string>
+    <string name="plus_sign">+</string>
+    <string name="minus_sign">-</string>
+    <string name="hummus">חומוס</string>
+    <string name="tahini">טחינה</string>
+    <string name="comments">הערות:</string>
+    <string name="save">שמור</string>
+    <string name="your_order_is_ready">ההזמנה שלך מוכנה!</string>
+    <string name="order_ready_subs">רחל בקמפוס, בוא לקחת</string>
+    <string name="order_in_progress_subs">ההזמנה שלך בהכנה…</string>
+    <string name="order_in_progress_title">הידד!</string>
+    <string name="order_edit_title">ההזמנה ממתינה…</string>
+    <string name="order_edit_subs">עוד אפשר לערוך את ההזמנה</string>
+    <string name="cancel">בטל</string>
+    <string name="got_it">קיבלתי!</string>
+</resources>

@@ -10,7 +10,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hurray!"
+        android:text="@string/order_in_progress_title"
         android:textSize="32sp"
         android:textStyle="bold"
         android:textColor="@color/orange_700"
@@ -31,7 +31,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Your order is in the making..."
+        android:text="@string/order_in_progress_subs"
         android:textColor="@color/orange_700"
         android:textSize="24sp"
         app:layout_constraintStart_toStartOf="parent"

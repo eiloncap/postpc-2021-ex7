@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "340776710200",
+    "project_id": "post-pc-ex7",
+    "storage_bucket": "post-pc-ex7.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:340776710200:android:6a630b3561e85c259636cd",
+        "android_client_info": {
+          "package_name": "il.co.rachelssandwiches"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "340776710200-n0glikm1cufaqofsisb7mg6k3iaon45u.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBcDkP-ftutvW7PLMXP563di0Sc52omzGU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "340776710200-n0glikm1cufaqofsisb7mg6k3iaon45u.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
