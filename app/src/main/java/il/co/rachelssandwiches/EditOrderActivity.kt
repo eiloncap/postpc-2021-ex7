@@ -2,12 +2,13 @@ package il.co.rachelssandwiches
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.widget.Button
 import android.widget.CheckBox
 import android.widget.EditText
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ListenerRegistration
 
 class EditOrderActivity : AppCompatActivity() {
 
@@ -15,6 +16,7 @@ class EditOrderActivity : AppCompatActivity() {
     private lateinit var picklesQuantityView: TextView
     private lateinit var picklesRemove: Button
     private var picklesQuantity = 0
+    private var snapshotListener: ListenerRegistration? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -60,20 +62,48 @@ class EditOrderActivity : AppCompatActivity() {
                 finish()
             }
         }
+        listenToChangesOnOrder(order.id!!)
     }
 
 
     private fun updateAddRemoveButtons() {
         picklesQuantityView.text = picklesQuantity.toString()
-        if (picklesQuantity >= RachelsSandwichesApp.MAX_PICKLES) {
-            picklesAdd.isEnabled = false
-            picklesRemove.isEnabled = true
-        } else if (picklesQuantity <= 0) {
-            picklesRemove.isEnabled = false
-            picklesAdd.isEnabled = true
-        } else {
-            picklesRemove.isEnabled = true
-            picklesAdd.isEnabled = true
-        }
+        picklesAdd.isEnabled = picklesQuantity < RachelsSandwichesApp.MAX_PICKLES
+        picklesRemove.isEnabled = picklesQuantity > 0
+    }
+
+    private fun listenToChangesOnOrder(id: String) {
+        val db = FirebaseFirestore.getInstance()
+        snapshotListener = db.collection(RachelsSandwichesApp.ORDERS_COLLECTION).document(id)
+            .addSnapshotListener { value, error ->
+                if (error != null) {
+                    // TODO: handle error
+                } else if (value == null) {
+                    // TODO: handle no value
+                } else if (!value.exists()) {
+                    // TODO: handle deletion
+                } else {
+                    val updatedOrder = value.toObject(FirestoreOrder::class.java)
+                    if (updatedOrder != null) {
+                        val intent = when (updatedOrder.status) {
+                            OrderStatus.IN_PROGRESS -> {
+                                Intent(this, OrderInProgressActivity::class.java)
+                            }
+                            OrderStatus.READY -> {
+                                Intent(this, OrderReadyActivity::class.java)
+                            }
+                            else -> return@addSnapshotListener
+                        }
+                        RachelsSandwichesApp.instance.order = updatedOrder
+                        startActivity(intent)
+                        finish()
+                    }
+                }
+            }
+    }
+
+    override fun onDestroy() {
+        snapshotListener?.remove()
+        super.onDestroy()
     }
 }

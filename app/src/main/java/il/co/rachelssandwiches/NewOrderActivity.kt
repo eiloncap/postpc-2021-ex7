@@ -47,7 +47,8 @@ class NewOrderActivity : AppCompatActivity() {
                 pickles = picklesQuantity,
                 hummus = hummusCheckBox.isChecked,
                 tahini = tahiniCheckBox.isChecked,
-                comment = commentsEditText.text.toString()
+                comment = commentsEditText.text.toString(),
+                status = OrderStatus.WAITING
             )
             RachelsSandwichesApp.instance.uploadOrder {
                 startActivity(Intent(this, EditOrderActivity::class.java))
@@ -58,15 +59,7 @@ class NewOrderActivity : AppCompatActivity() {
 
     private fun updateAddRemoveButtons() {
         picklesQuantityView.text = picklesQuantity.toString()
-        if (picklesQuantity >= RachelsSandwichesApp.MAX_PICKLES) {
-            picklesAdd.isEnabled = false
-            picklesRemove.isEnabled = true
-        } else if (picklesQuantity <= 0) {
-            picklesRemove.isEnabled = false
-            picklesAdd.isEnabled = true
-        } else {
-            picklesRemove.isEnabled = true
-            picklesAdd.isEnabled = true
-        }
+        picklesAdd.isEnabled = picklesQuantity < RachelsSandwichesApp.MAX_PICKLES
+        picklesRemove.isEnabled = picklesQuantity > 0
     }
 }

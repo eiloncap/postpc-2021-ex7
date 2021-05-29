@@ -1,9 +1,9 @@
 package il.co.rachelssandwiches
 
 import android.app.Application
-import android.util.Log
 import com.google.firebase.FirebaseApp
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ListenerRegistration
 
 class RachelsSandwichesApp : Application() {
 
@@ -13,14 +13,18 @@ class RachelsSandwichesApp : Application() {
         const val MAX_PICKLES = 10
         const val ORDERS_COLLECTION = "orders"
     }
-
-    var orderState: OrderState = OrderState.DONE
     var order: FirestoreOrder? = null
 
     override fun onCreate() {
         super.onCreate()
         FirebaseApp.initializeApp(this)
         instance = this
+    }
+
+    fun markOrderDoneAndRestartNewOne() {
+        order?.status = OrderStatus.DONE
+        uploadOrder()
+        order = null
     }
 
     private fun downloadOrder() {
@@ -52,7 +56,6 @@ class RachelsSandwichesApp : Application() {
             val db = FirebaseFirestore.getInstance()
             db.collection(ORDERS_COLLECTION).document(order!!.id!!).delete()
                 .addOnSuccessListener {
-                    orderState = OrderState.DONE
                     order = null
                     if (callback != null) {
                         callback()

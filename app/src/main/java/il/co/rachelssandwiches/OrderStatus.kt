@@ -1,5 +1,5 @@
 package il.co.rachelssandwiches
 
-enum class OrderState {
+enum class OrderStatus {
     WAITING, IN_PROGRESS, READY, DONE
 }

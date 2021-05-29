@@ -6,5 +6,6 @@ data class FirestoreOrder(
     var pickles: Int = 0,
     var hummus: Boolean= false,
     var tahini: Boolean = false,
-    var comment: String = ""
+    var comment: String = "",
+    var status: OrderStatus = OrderStatus.DONE
 )
