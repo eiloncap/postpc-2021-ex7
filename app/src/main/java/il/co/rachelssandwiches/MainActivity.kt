@@ -9,7 +9,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        startActivity(Intent(this, NewOrderActivity::class.java))
+        startActivity(Intent(this, OrderInProgressActivity::class.java))
         // todo: maybe should start with a main activity
 //        when (RachelsSandwichesApp.instance.orderState) {
 //            OrderState.DONE -> {
@@ -19,7 +19,7 @@ class MainActivity : AppCompatActivity() {
 //                startActivity(Intent(this, EditOrderActivity::class.java))
 //            }
 //            OrderState.IN_PROGRESS -> {
-//                startActivity(Intent(this, InProgressActivity::class.java))
+//                startActivity(Intent(this, OrderInProgressActivity::class.java))
 //            }
 //            OrderState.READY -> {
 //                startActivity(Intent(this, OrderReadyActivity::class.java))

@@ -26,7 +26,7 @@ class RachelsSandwichesApp : Application() {
 //                startActivity(Intent(this, EditOrderActivity::class.java))
 //            }
 //            OrderState.IN_PROGRESS -> {
-//                startActivity(Intent(this, InProgressActivity::class.java))
+//                startActivity(Intent(this, OrderInProgressActivity::class.java))
 //            }
 //            OrderState.READY -> {
 //                startActivity(Intent(this, OrderReadyActivity::class.java))
