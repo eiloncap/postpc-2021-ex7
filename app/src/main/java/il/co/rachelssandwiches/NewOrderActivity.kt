@@ -2,6 +2,7 @@ package il.co.rachelssandwiches
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.CheckBox
 import android.widget.EditText
@@ -50,9 +51,11 @@ class NewOrderActivity : AppCompatActivity() {
                 comment = commentsEditText.text.toString(),
                 status = OrderStatus.WAITING
             )
-            RachelsSandwichesApp.instance.uploadOrder {
-                startActivity(Intent(this, EditOrderActivity::class.java))
-                finish()
+            RachelsSandwichesApp.instance.uploadOrder()?.observe(this) { retVal: Boolean ->
+                if (retVal) {
+                    startActivity(Intent(this, EditOrderActivity::class.java))
+                    finish()
+                }
             }
         }
     }

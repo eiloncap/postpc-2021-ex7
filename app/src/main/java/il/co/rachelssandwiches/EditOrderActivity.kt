@@ -54,12 +54,18 @@ class EditOrderActivity : AppCompatActivity() {
             order.tahini = tahiniCheckBox.isChecked
             order.comment = commentsEditText.text.toString()
             order.pickles = picklesQuantity
-            RachelsSandwichesApp.instance.uploadOrder { it.isEnabled = true }
+            RachelsSandwichesApp.instance.uploadOrder()?.observe(this) { retVal: Boolean ->
+                if (retVal) {
+                    it.isEnabled = true
+                }
+            }
         }
         cancelButton.setOnClickListener {
-            RachelsSandwichesApp.instance.uploadDeleteOrder {
-                startActivity(Intent(this, NewOrderActivity::class.java))
-                finish()
+            RachelsSandwichesApp.instance.uploadDeleteOrder()?.observe(this) { retVal: Boolean ->
+                if (retVal) {
+                    startActivity(Intent(this, NewOrderActivity::class.java))
+                    finish()
+                }
             }
         }
         listenToChangesOnOrder(order.id!!)
