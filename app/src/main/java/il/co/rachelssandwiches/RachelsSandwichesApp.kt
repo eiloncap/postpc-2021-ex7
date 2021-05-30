@@ -2,6 +2,7 @@ package il.co.rachelssandwiches
 
 import android.app.Application
 import android.content.SharedPreferences
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.preference.PreferenceManager
@@ -39,7 +40,7 @@ class RachelsSandwichesApp : Application() {
                 liveData.value = order?.status
             }
             .addOnFailureListener {
-                // todo: deal with failure
+                Log.e("DB error", "downloading error")
             }
         return liveData
     }
@@ -54,7 +55,7 @@ class RachelsSandwichesApp : Application() {
                     liveData.value = true
                 }
                 .addOnFailureListener {
-                    // todo: deal with failure
+                    Log.e("DB error", "uploading error")
                 }
         }
 
@@ -69,7 +70,7 @@ class RachelsSandwichesApp : Application() {
                     liveData.value = true
                 }
                 .addOnFailureListener {
-                    // todo: deal with failure
+                    Log.e("DB error", "deleting error")
                 }
         }
 
@@ -85,7 +86,7 @@ class RachelsSandwichesApp : Application() {
                     liveData.value = true
                 }
                 .addOnFailureListener {
-                    // todo: deal with failure
+                    Log.e("DB error", "uploading error")
                 }
         }
     }
