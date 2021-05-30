@@ -15,7 +15,7 @@ class NewOrderActivity : AppCompatActivity() {
         private const val PICKLES_BUNDLE = "pickles_count"
         private const val HUMMUS_BUNDLE = "hummus_bool"
         private const val TAHINI_BUNDLE = "tahini_bool"
-        private const val SP_NAMES = "sp_names"
+        private const val SP_NAMES_HINTS = "sp_names"
     }
 
     private lateinit var picklesAdd: Button
@@ -28,6 +28,8 @@ class NewOrderActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_new_order)
+
+        // find views
         picklesAdd = findViewById(R.id.picklesAdd)
         picklesQuantityView = findViewById(R.id.picklesQuantity)
         picklesRemove = findViewById(R.id.picklesRemove)
@@ -37,6 +39,7 @@ class NewOrderActivity : AppCompatActivity() {
         val commentsEditText = findViewById<EditText>(R.id.commentsEditText)
         val saveButton = findViewById<Button>(R.id.saveButton)
 
+        // init listeners
         picklesAdd.setOnClickListener {
             picklesQuantity++
             updateAddRemoveButtons()
@@ -52,6 +55,7 @@ class NewOrderActivity : AppCompatActivity() {
             it.isEnabled = false
             findViewById<View>(R.id.shadingLayer).visibility = View.VISIBLE
             findViewById<ProgressBar>(R.id.progressBar).visibility = View.VISIBLE
+            // create new order instance
             RachelsSandwichesApp.instance.order = FirestoreOrder(
                 id = UUID.randomUUID().toString(),
                 customer_name = nameEditText.text.toString(),
@@ -61,8 +65,12 @@ class NewOrderActivity : AppCompatActivity() {
                 comment = commentsEditText.text.toString(),
                 status = OrderStatus.WAITING
             )
-            this.getSharedPreferences(SP_NAMES, Context.MODE_PRIVATE).edit()
+
+            // save new name to hints
+            this.getSharedPreferences(SP_NAMES_HINTS, Context.MODE_PRIVATE).edit()
                 .putString(nameEditText.text.toString(), "").apply()
+
+            // upload new order
             RachelsSandwichesApp.instance.uploadOrder()?.observe(this) { retVal: Boolean ->
                 if (retVal) {
                     startActivity(Intent(this, EditOrderActivity::class.java))
@@ -74,8 +82,9 @@ class NewOrderActivity : AppCompatActivity() {
 
     private fun initNameEditTextView(): AutoCompleteTextView {
         val nameEditText = findViewById<AutoCompleteTextView>(R.id.nameEditText)
+        // get all used names
         val names: Array<String> =
-            this.getSharedPreferences(SP_NAMES, Context.MODE_PRIVATE).all.keys.toTypedArray()
+            this.getSharedPreferences(SP_NAMES_HINTS, Context.MODE_PRIVATE).all.keys.toTypedArray()
         ArrayAdapter(this, android.R.layout.simple_list_item_1, names).also { adapter ->
             nameEditText.setAdapter(adapter)
         }

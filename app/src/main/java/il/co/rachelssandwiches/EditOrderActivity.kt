@@ -29,6 +29,8 @@ class EditOrderActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_edit_order)
+
+        // find views
         picklesAdd = findViewById(R.id.picklesAdd)
         picklesQuantityView = findViewById(R.id.picklesQuantity)
         picklesRemove = findViewById(R.id.picklesRemove)
@@ -40,6 +42,7 @@ class EditOrderActivity : AppCompatActivity() {
 
         val order: FirestoreOrder = RachelsSandwichesApp.instance.order!!
 
+        // init listeners
         picklesAdd.setOnClickListener {
             picklesQuantity++
             updateAddRemoveButtons()
@@ -60,12 +63,16 @@ class EditOrderActivity : AppCompatActivity() {
             it.isEnabled = false
             findViewById<View>(R.id.shadingLayer).visibility = View.VISIBLE
             findViewById<ProgressBar>(R.id.progressBar).visibility = View.VISIBLE
+            // update App's order
             order.hummus = hummusCheckBox.isChecked
             order.tahini = tahiniCheckBox.isChecked
             order.comment = commentsEditText.text.toString()
             order.pickles = picklesQuantity
+
+            // upload new order
             RachelsSandwichesApp.instance.uploadOrder()?.observe(this) { retVal: Boolean ->
                 if (retVal) {
+                    // move to Edit activity
                     it.isEnabled = true
                     findViewById<View>(R.id.shadingLayer).visibility = View.GONE
                     findViewById<ProgressBar>(R.id.progressBar).visibility = View.GONE

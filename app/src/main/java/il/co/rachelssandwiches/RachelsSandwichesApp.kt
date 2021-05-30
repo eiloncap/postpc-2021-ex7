@@ -28,6 +28,9 @@ class RachelsSandwichesApp : Application() {
         instance = this
     }
 
+    /**
+     * Returns a LiveData of current on going order status if exists, else null
+     */
     fun downloadOrder(): LiveData<OrderStatus>? {
         val sp: SharedPreferences = PreferenceManager.getDefaultSharedPreferences(this)
         val id = sp.getString(SP_ORDERS_ID, null) ?: return null
@@ -45,6 +48,10 @@ class RachelsSandwichesApp : Application() {
         return liveData
     }
 
+    /**
+     * uploading current order to db
+     * Returns a boolean LiveData of upload status, if order is null returns null
+     */
     fun uploadOrder(): LiveData<Boolean>? =
         updateOrderAndReturnLiveDataDecorator { doc: DocumentReference,
                                                 liveData: MutableLiveData<Boolean> ->
@@ -59,6 +66,10 @@ class RachelsSandwichesApp : Application() {
                 }
         }
 
+    /**
+     * deleting current order in db
+     * Returns a boolean LiveData of delete status, if order is null returns null
+     */
     fun uploadDeleteOrder(): LiveData<Boolean>? =
         updateOrderAndReturnLiveDataDecorator { doc: DocumentReference,
                                                 liveData: MutableLiveData<Boolean> ->
@@ -74,6 +85,10 @@ class RachelsSandwichesApp : Application() {
                 }
         }
 
+    /**
+     * marks current order as done
+     * Returns a boolean LiveData of upload status, if order is null returns null
+     */
     fun markOrderDoneAndRestartNewOne(): LiveData<Boolean>? {
         order?.status = OrderStatus.DONE
         return updateOrderAndReturnLiveDataDecorator { doc: DocumentReference,
@@ -91,6 +106,10 @@ class RachelsSandwichesApp : Application() {
         }
     }
 
+    /**
+     * Generic fun for modification of db.
+     * Returns a boolean LiveData of modification status, if order is null returns null
+     */
     private fun updateOrderAndReturnLiveDataDecorator(
         f: (DocumentReference, MutableLiveData<Boolean>) -> Unit
     ): LiveData<Boolean>? {

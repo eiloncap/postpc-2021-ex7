@@ -10,12 +10,12 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         val liveData: LiveData<OrderStatus>? = RachelsSandwichesApp.instance.downloadOrder()
-        if (liveData == null) {
+        if (liveData == null) {  // no order in process
             startActivity(Intent(this, NewOrderActivity::class.java))
             finish()
         } else {
             liveData.observe(this) {
-                if (it != null) {
+                if (it != null) {  // order in process
                     val intent = when (it) {
                         OrderStatus.DONE -> Intent(this, NewOrderActivity::class.java)
                         OrderStatus.WAITING -> Intent(this, EditOrderActivity::class.java)
