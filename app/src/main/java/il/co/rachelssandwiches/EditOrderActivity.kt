@@ -43,16 +43,7 @@ class EditOrderActivity : AppCompatActivity() {
         val order: FirestoreOrder = RachelsSandwichesApp.instance.order!!
 
         // init listeners
-        picklesAdd.setOnClickListener {
-            picklesQuantity++
-            updateAddRemoveButtons()
-        }
-        picklesRemove.setOnClickListener {
-            picklesQuantity--
-            updateAddRemoveButtons()
-        }
-        picklesQuantity = order.pickles
-        updateAddRemoveButtons()
+        initPicklesViews()
 
         hummusCheckBox.isChecked = order.hummus
         tahiniCheckBox.isChecked = order.tahini
@@ -92,6 +83,22 @@ class EditOrderActivity : AppCompatActivity() {
         listenToChangesOnOrder(order.id!!)
     }
 
+    private fun initPicklesViews() {
+        picklesAdd.setOnClickListener {
+            if (picklesQuantity < RachelsSandwichesApp.MAX_PICKLES) {
+                picklesQuantity++
+                updateAddRemoveButtons()
+            }
+        }
+        picklesRemove.setOnClickListener {
+            if (picklesQuantity > 0) {
+                picklesQuantity--
+                updateAddRemoveButtons()
+            }
+        }
+        picklesQuantity = RachelsSandwichesApp.instance.order!!.pickles
+        updateAddRemoveButtons()
+    }
 
     private fun updateAddRemoveButtons() {
         picklesQuantityView.text = picklesQuantity.toString()

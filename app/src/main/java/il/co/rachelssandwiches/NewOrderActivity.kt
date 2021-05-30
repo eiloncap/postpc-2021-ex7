@@ -40,16 +40,7 @@ class NewOrderActivity : AppCompatActivity() {
         val saveButton = findViewById<Button>(R.id.saveButton)
 
         // init listeners
-        picklesAdd.setOnClickListener {
-            picklesQuantity++
-            updateAddRemoveButtons()
-        }
-        picklesRemove.setOnClickListener {
-            picklesQuantity--
-            updateAddRemoveButtons()
-        }
-
-        updateAddRemoveButtons()
+        initPicklesViews()
 
         saveButton.setOnClickListener {
             it.isEnabled = false
@@ -78,6 +69,22 @@ class NewOrderActivity : AppCompatActivity() {
                 }
             }
         }
+    }
+
+    private fun initPicklesViews() {
+        picklesAdd.setOnClickListener {
+            if (picklesQuantity < RachelsSandwichesApp.MAX_PICKLES) {
+                picklesQuantity++
+                updateAddRemoveButtons()
+            }
+        }
+        picklesRemove.setOnClickListener {
+            if (picklesQuantity > 0) {
+                picklesQuantity--
+                updateAddRemoveButtons()
+            }
+        }
+        updateAddRemoveButtons()
     }
 
     private fun initNameEditTextView(): AutoCompleteTextView {
