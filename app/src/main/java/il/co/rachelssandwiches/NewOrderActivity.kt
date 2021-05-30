@@ -3,10 +3,8 @@ package il.co.rachelssandwiches
 import android.content.Intent
 import android.os.Bundle
 import android.os.PersistableBundle
-import android.widget.Button
-import android.widget.CheckBox
-import android.widget.EditText
-import android.widget.TextView
+import android.view.View
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import java.util.*
 
@@ -50,6 +48,8 @@ class NewOrderActivity : AppCompatActivity() {
 
         saveButton.setOnClickListener {
             it.isEnabled = false
+            findViewById<View>(R.id.shadingLayer).visibility = View.VISIBLE
+            findViewById<ProgressBar>(R.id.progressBar).visibility = View.VISIBLE
             RachelsSandwichesApp.instance.order = FirestoreOrder(
                 id = UUID.randomUUID().toString(),
                 customer_name = nameEditText.text.toString(),

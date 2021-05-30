@@ -3,10 +3,8 @@ package il.co.rachelssandwiches
 import android.content.Intent
 import android.os.Bundle
 import android.os.PersistableBundle
-import android.widget.Button
-import android.widget.CheckBox
-import android.widget.EditText
-import android.widget.TextView
+import android.view.View
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ListenerRegistration
@@ -59,6 +57,8 @@ class EditOrderActivity : AppCompatActivity() {
 
         saveButton.setOnClickListener {
             it.isEnabled = false
+            findViewById<View>(R.id.shadingLayer).visibility = View.VISIBLE
+            findViewById<ProgressBar>(R.id.progressBar).visibility = View.VISIBLE
             order.hummus = hummusCheckBox.isChecked
             order.tahini = tahiniCheckBox.isChecked
             order.comment = commentsEditText.text.toString()
@@ -66,10 +66,14 @@ class EditOrderActivity : AppCompatActivity() {
             RachelsSandwichesApp.instance.uploadOrder()?.observe(this) { retVal: Boolean ->
                 if (retVal) {
                     it.isEnabled = true
+                    findViewById<View>(R.id.shadingLayer).visibility = View.GONE
+                    findViewById<ProgressBar>(R.id.progressBar).visibility = View.GONE
                 }
             }
         }
         cancelButton.setOnClickListener {
+            findViewById<View>(R.id.shadingLayer).visibility = View.VISIBLE
+            findViewById<ProgressBar>(R.id.progressBar).visibility = View.VISIBLE
             RachelsSandwichesApp.instance.uploadDeleteOrder()?.observe(this) { retVal: Boolean ->
                 if (retVal) {
                     startActivity(Intent(this, NewOrderActivity::class.java))
