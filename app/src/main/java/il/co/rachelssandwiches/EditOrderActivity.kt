@@ -3,6 +3,7 @@ package il.co.rachelssandwiches
 import android.content.Intent
 import android.os.Bundle
 import android.os.PersistableBundle
+import android.util.Log
 import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
@@ -96,11 +97,11 @@ class EditOrderActivity : AppCompatActivity() {
         snapshotListener = db.collection(RachelsSandwichesApp.ORDERS_COLLECTION).document(id)
             .addSnapshotListener { value, error ->
                 if (error != null) {
-                    // TODO: handle error
+                    Log.e("DB error", "listenToChangesOnOrder error")
                 } else if (value == null) {
-                    // TODO: handle no value
+                    Log.e("DB error", "listenToChangesOnOrder error, val is null")
                 } else if (!value.exists()) {
-                    // TODO: handle deletion
+                    Log.e("DB error", "listenToChangesOnOrder error, val doesn't exist")
                 } else {
                     val updatedOrder = value.toObject(FirestoreOrder::class.java)
                     if (updatedOrder != null) {

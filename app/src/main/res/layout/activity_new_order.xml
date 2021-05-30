@@ -63,7 +63,7 @@
         app:layout_constraintStart_toStartOf="@+id/startGuideline"
         app:layout_constraintTop_toBottomOf="@+id/titleText" />
 
-    <EditText
+    <AutoCompleteTextView
         android:id="@+id/nameEditText"
         android:layout_width="0dp"
         android:layout_height="wrap_content"

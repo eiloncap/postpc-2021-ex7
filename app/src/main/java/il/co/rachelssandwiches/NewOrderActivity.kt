@@ -1,5 +1,6 @@
 package il.co.rachelssandwiches
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.os.PersistableBundle
@@ -14,6 +15,7 @@ class NewOrderActivity : AppCompatActivity() {
         private const val PICKLES_BUNDLE = "pickles_count"
         private const val HUMMUS_BUNDLE = "hummus_bool"
         private const val TAHINI_BUNDLE = "tahini_bool"
+        private const val SP_NAMES = "sp_names"
     }
 
     private lateinit var picklesAdd: Button
@@ -26,12 +28,12 @@ class NewOrderActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_new_order)
-        val nameEditText = findViewById<EditText>(R.id.nameEditText)
         picklesAdd = findViewById(R.id.picklesAdd)
         picklesQuantityView = findViewById(R.id.picklesQuantity)
         picklesRemove = findViewById(R.id.picklesRemove)
         hummusCheckBox = findViewById(R.id.hummusCheckBox)
         tahiniCheckBox = findViewById(R.id.tahiniCheckBox)
+        val nameEditText = initNameEditTextView()
         val commentsEditText = findViewById<EditText>(R.id.commentsEditText)
         val saveButton = findViewById<Button>(R.id.saveButton)
 
@@ -59,6 +61,8 @@ class NewOrderActivity : AppCompatActivity() {
                 comment = commentsEditText.text.toString(),
                 status = OrderStatus.WAITING
             )
+            this.getSharedPreferences(SP_NAMES, Context.MODE_PRIVATE).edit()
+                .putString(nameEditText.text.toString(), "").apply()
             RachelsSandwichesApp.instance.uploadOrder()?.observe(this) { retVal: Boolean ->
                 if (retVal) {
                     startActivity(Intent(this, EditOrderActivity::class.java))
@@ -66,6 +70,17 @@ class NewOrderActivity : AppCompatActivity() {
                 }
             }
         }
+    }
+
+    private fun initNameEditTextView(): AutoCompleteTextView {
+        val nameEditText = findViewById<AutoCompleteTextView>(R.id.nameEditText)
+        val names: Array<String> =
+            this.getSharedPreferences(SP_NAMES, Context.MODE_PRIVATE).all.keys.toTypedArray()
+        ArrayAdapter(this, android.R.layout.simple_list_item_1, names).also { adapter ->
+            nameEditText.setAdapter(adapter)
+        }
+
+        return nameEditText
     }
 
     private fun updateAddRemoveButtons() {
