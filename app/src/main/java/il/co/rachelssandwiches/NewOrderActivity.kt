@@ -47,7 +47,7 @@ class NewOrderActivity : AppCompatActivity() {
             findViewById<View>(R.id.shadingLayer).visibility = View.VISIBLE
             findViewById<ProgressBar>(R.id.progressBar).visibility = View.VISIBLE
             // create new order instance
-            RachelsSandwichesApp.instance.order = FirestoreOrder(
+            RachelsSandwichesApp.viewModel.order = FirestoreOrder(
                 id = UUID.randomUUID().toString(),
                 customer_name = nameEditText.text.toString(),
                 pickles = picklesQuantity,
@@ -62,7 +62,7 @@ class NewOrderActivity : AppCompatActivity() {
                 .putString(nameEditText.text.toString(), "").apply()
 
             // upload new order
-            RachelsSandwichesApp.instance.uploadOrder()?.observe(this) { retVal: Boolean ->
+            RachelsSandwichesApp.viewModel.uploadOrder()?.observe(this) { retVal: Boolean ->
                 if (retVal) {
                     startActivity(Intent(this, EditOrderActivity::class.java))
                     finish()

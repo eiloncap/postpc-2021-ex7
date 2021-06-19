@@ -9,11 +9,11 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        val liveData: LiveData<OrderStatus>? = RachelsSandwichesApp.instance.downloadOrder()
-        if (liveData == null) {  // no order in process
+        if (RachelsSandwichesApp.id == null) {  // no order in process
             startActivity(Intent(this, NewOrderActivity::class.java))
             finish()
         } else {
+            val liveData: LiveData<OrderStatus> = RachelsSandwichesApp.viewModel.downloadOrder()
             liveData.observe(this) {
                 if (it != null) {  // order in process
                     val intent = when (it) {

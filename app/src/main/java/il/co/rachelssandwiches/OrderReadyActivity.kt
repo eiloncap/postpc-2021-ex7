@@ -12,7 +12,7 @@ class OrderReadyActivity : AppCompatActivity() {
 
         val gotItButton = findViewById<Button>(R.id.gotItButton)
         gotItButton.setOnClickListener {
-            RachelsSandwichesApp.instance.markOrderDoneAndRestartNewOne()?.observe(this) { retVal: Boolean ->
+            RachelsSandwichesApp.viewModel.markOrderDoneAndRestartNewOne()?.observe(this) { retVal: Boolean ->
                 if (retVal) {
                     startActivity(Intent(this, NewOrderActivity::class.java))
                     finish()
