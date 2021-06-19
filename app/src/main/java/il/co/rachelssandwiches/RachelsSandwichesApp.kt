@@ -2,7 +2,6 @@ package il.co.rachelssandwiches
 
 import android.app.Application
 import android.content.SharedPreferences
-import android.util.Log
 import androidx.preference.PreferenceManager
 import com.google.firebase.FirebaseApp
 
@@ -11,13 +10,12 @@ class RachelsSandwichesApp : Application() {
     companion object {
         const val MAX_PICKLES = 10
         private const val SP_ORDERS_ID = "order_id"
-        lateinit var viewModel : SandwichesViewModel
+        lateinit var viewModel: SandwichesViewModel
 
         private lateinit var sp: SharedPreferences
         var id: String? = null
             get() {
                 val t = sp.getString(SP_ORDERS_ID, null)
-                Log.d("eilon", "gto from sp id = $t")
                 return t
             }
             set(value) {

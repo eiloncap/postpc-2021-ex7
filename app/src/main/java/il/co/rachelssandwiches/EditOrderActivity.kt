@@ -22,6 +22,7 @@ class EditOrderActivity : AppCompatActivity() {
     private lateinit var hummusCheckBox: CheckBox
     private lateinit var tahiniCheckBox: CheckBox
     private lateinit var commentsEditText: EditText
+    private lateinit var viewModel: SandwichesViewModel
     private var picklesQuantity = 0
     private var snapshotListener: ListenerRegistration? = null
 
@@ -39,23 +40,24 @@ class EditOrderActivity : AppCompatActivity() {
         val saveButton = findViewById<Button>(R.id.saveButton)
         val cancelButton = findViewById<Button>(R.id.cancelButton)
 
-        val order: FirestoreOrder? = RachelsSandwichesApp.viewModel.order
+        viewModel = RachelsSandwichesApp.viewModel
 
         // init listeners
         initPicklesViews()
 
-        updateViews(order)
+        updateViews()
 
         saveButton.setOnClickListener {
             it.isEnabled = false
             findViewById<View>(R.id.shadingLayer).visibility = View.VISIBLE
             findViewById<ProgressBar>(R.id.progressBar).visibility = View.VISIBLE
             // update App's order
-            if (order != null) {
-                order.hummus = hummusCheckBox.isChecked
-                order.tahini = tahiniCheckBox.isChecked
-                order.comment = commentsEditText.text.toString()
-                order.pickles = picklesQuantity
+            if (viewModel.order != null) {
+                viewModel.modifyOrder(
+                    picklesQuantity, hummusCheckBox.isChecked,
+                    tahiniCheckBox.isChecked,
+                    commentsEditText.text.toString()
+                )
             }
 
             // upload new order
@@ -78,19 +80,19 @@ class EditOrderActivity : AppCompatActivity() {
                 }
             }
         }
-        if (order != null) {
+        if (viewModel.order != null) {
             snapshotListener = RachelsSandwichesApp.viewModel.getSnapshotListener(
-                order.id!!, ::responseToChangesOnOrder
+                viewModel.order!!.id!!, ::responseToChangesOnOrder
             )
         }
     }
 
-    private fun updateViews(order: FirestoreOrder?) {
+    private fun updateViews() {
         picklesQuantity = RachelsSandwichesApp.viewModel.order?.pickles ?: 0
         picklesQuantityView.text = picklesQuantity.toString()
-        hummusCheckBox.isChecked = order?.hummus ?: false
-        tahiniCheckBox.isChecked = order?.tahini ?: false
-        commentsEditText.setText(order?.comment ?: "")
+        hummusCheckBox.isChecked = viewModel.order?.hummus ?: false
+        tahiniCheckBox.isChecked = viewModel.order?.tahini ?: false
+        commentsEditText.setText(viewModel.order?.comment ?: "")
     }
 
     private fun initPicklesViews() {
@@ -119,7 +121,7 @@ class EditOrderActivity : AppCompatActivity() {
     fun responseToChangesOnOrder(updatedOrder: FirestoreOrder?) {
         if (updatedOrder != null) {
             RachelsSandwichesApp.viewModel.order = updatedOrder
-            updateViews(updatedOrder)
+            updateViews()
             val intent = when (updatedOrder.status) {
                 OrderStatus.IN_PROGRESS -> {
                     Intent(this, OrderInProgressActivity::class.java)

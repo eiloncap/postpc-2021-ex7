@@ -5,7 +5,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.firebase.firestore.DocumentReference
-import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ListenerRegistration
 
@@ -17,6 +16,13 @@ class SandwichesViewModel : ViewModel() {
 
     var order: FirestoreOrder? = null
     private val db: FirebaseFirestore = FirebaseFirestore.getInstance()
+
+    fun modifyOrder(pickles: Int, hummus: Boolean, tahini: Boolean, comment: String) {
+        order!!.pickles = pickles
+        order!!.hummus = hummus
+        order!!.tahini = tahini
+        order!!.comment = comment
+    }
 
     /**
      * Returns a LiveData of current on going order status if exists, else null
@@ -45,7 +51,6 @@ class SandwichesViewModel : ViewModel() {
                                                 liveData: MutableLiveData<Boolean> ->
             doc.set(order!!)
                 .addOnSuccessListener {
-                    RachelsSandwichesApp.id = order!!.id
                     RachelsSandwichesApp.id = order!!.id
                     liveData.value = true
                 }
